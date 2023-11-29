@@ -11,8 +11,4 @@ const flightInstance = axios.create({
       }
   })
 
-  export const fetchFlight = (params) => new Promise ((resolve, reject) => {
-    flightInstance.get('flights', {params})
-    .then(res => resolve(res?.data?.flights ?? []))
-    .catch(error => reject(error))
-  }) 
+  export const fetchFlight = (params) => flightInstance.get('flights', {params});

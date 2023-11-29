@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "antd";
+import React, { useRef, useState } from "react";
 import useFlightData from "hooks/useFlightData";
 import FlightList from "components/list/FlightList";
-import { Tabs,Input } from "antd";
-import { useSearchParams } from "react-router-dom";
-
+import { Tabs, Input,Button } from "antd";
+import debounce from 'lodash.debounce'
 const list = [
   {
     key: "D",
@@ -18,53 +16,60 @@ const list = [
   },
 ];
 const Dashboard = () => {
-  const queryParameters = new URLSearchParams(window.location.search)
-  let [searchParams, setSearchParams] = useSearchParams();
-  const { flights, loading, getFlight } = useFlightData({
+  
+  const { flights, loading, getFlight,searchParams, setSearchParams,onLoadMore } = useFlightData({
     scheduleDate: "2023-12-09",
   });
-  const [filter, setFilter] = useState({
-    scheduleDate: null,
-    flightDirection: null,
-    route: null
-
-  });
-
-  const resetFilter = () => {
-    setFilter({ scheduleDate: null,
-    flightDirection: null,
-    route: null,})
+  const [query, setQuery] = useState(searchParams.get("route"));
+  const onChange = (key ,value) => {
+    setSearchParams((p) => {
+      if (value) {
+        p.set(key, value);
+      } else {
+        p.delete(key)
+      }
+      return p;
+    })
   }
-
-  const onChangeFilter = (key, value) => {
-    setFilter((p) => ({ ...p, [key]: value }));
-  };
-  const onChangeIATACode = (code) => {
-    if(code.length > 2) {
-      // onChangeFilter('route', code)
-    }
-  }
-  useEffect(() => {
-   getFlight(searchParams)
-  }, [searchParams])
   
+const debouncedFilter = useRef (
+    debounce((key, nextValue) => {
+        onChange(key, nextValue )
+    }, 700),
+  ).current
+
   return (
     <div>
-      <Input placeholder="IATA CODE" maxLength={3} onChange={(e) => onChangeIATACode(e.target.value)}/>
+       <Button
+        type="primary"
+        onClick={() => {
+          // onChangeFilter('scheduleDate', "2023-12-10")
+          // getFlight({ scheduleDate: "2023-12-10" });
+        }}
+      >
+        Button
+      </Button>
+      <Input
+        value={query}
+        placeholder="IATA CODE"
+        maxLength={3}
+        onChange={(e) =>{
+          debouncedFilter('route',e.target.value);
+          setQuery(e.target.value);}
+        }
+      />
       <Tabs
         defaultActiveKey="1"
         items={list}
-        onChange={(key) => {
-          console.log("lkasdawda",searchParams)
-          setSearchParams({...searchParams})
-        }}
+        onChange={(key) =>
+          onChange("flightDirection", key)
+        }
       />
-      <FlightList data={flights} loading={loading} />
+      <FlightList data={flights} loading={loading}  />
       <Button
         type="primary"
         onClick={() => {
-          onChangeFilter('scheduleDate', "2023-12-10")
-          // getFlight({ scheduleDate: "2023-12-10" });
+          onLoadMore();
         }}
       >
         Button
