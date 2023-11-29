@@ -1,23 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useEffect } from 'react';
 
+import useFlightData from './hooks/useFlightData';
+import Toast from './components/toast/Toast';
 function App() {
+
+ const {flights, loading} = useFlightData({scheduleDate:"2023-12-09"});
+ useEffect(() => {
+  console.log("lşaksdq",flights)
+}, [flights])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     {loading ? <div> loading....</div> : null}
+     <Toast/>
     </div>
   );
 }
