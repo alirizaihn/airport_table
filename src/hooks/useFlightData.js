@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getFlight } from "../services/FlightAPI";
 import { useToast } from "./useToast";
+import { fetchFlight } from "services/FlightAPI";
+
 
 const useFlightData = (params) => {
   const [flights, setFlights ] = useState([]);
@@ -9,18 +10,22 @@ const useFlightData = (params) => {
 
 
   useEffect(() => {
-    getFlight(params).then((res) =>{
-          setFlights(res)
-          setLoading(false) 
-        })
-        .catch(error =>  {
-          toastError(error?.message)
-          setLoading(false) 
-           })
+    getFlight(params);
   }, []);
 
- 
-  return ({flights, loading});
+  const getFlight = (filter) => {
+    fetchFlight(filter).then((res) =>{
+      setFlights(res)
+      setLoading(false) 
+
+    })
+    .catch(error =>  {
+      toastError(error?.message)
+      setLoading(false) 
+       })
+  }
+
+  return ({flights, loading, getFlight});
 };
 
 export default useFlightData;
