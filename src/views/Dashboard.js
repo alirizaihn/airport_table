@@ -17,7 +17,7 @@ const list = [
 ];
 const Dashboard = () => {
   
-  const { flights, loading, getFlight,searchParams, setSearchParams,onLoadMore } = useFlightData({
+  const { flights, loading, getFlight,searchParams, setSearchParams,onLoadMore,onLoadPrevMore } = useFlightData({
     scheduleDate: "2023-12-09",
   });
   const [query, setQuery] = useState(searchParams.get("route"));
@@ -43,8 +43,7 @@ const debouncedFilter = useRef (
        <Button
         type="primary"
         onClick={() => {
-          // onChangeFilter('scheduleDate', "2023-12-10")
-          // getFlight({ scheduleDate: "2023-12-10" });
+          onLoadPrevMore()
         }}
       >
         Button
@@ -61,6 +60,7 @@ const debouncedFilter = useRef (
       <Tabs
         defaultActiveKey="1"
         items={list}
+        activeKey={searchParams.get('flightDirection')}
         onChange={(key) =>
           onChange("flightDirection", key)
         }

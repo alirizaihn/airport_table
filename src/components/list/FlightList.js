@@ -17,7 +17,9 @@ const FlightList = ({data, loadMore, loading}) => {
               title={<a href="https://ant.design">{item?.flightName}</a>}
               description={item?.scheduleDateTime}
             />
-            <div>content</div>
+            
+            <div>{item?.scheduleDateTime}</div><br></br>
+            <div>{item?.route?.destinations[0]}</div>
           </Skeleton>
         </List.Item>
       )}
