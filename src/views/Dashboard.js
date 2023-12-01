@@ -54,11 +54,8 @@ const debouncedFilter = useRef (
     style={{ width: 200 }}
     placeholder="Date"
     optionFilterProp="children"
-    // filterOption={(input, option) => (option?.label ?? '').includes(input)}
-    // filterSort={(optionA, optionB) =>
-    //   (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-    // }
-  
+    onChange={(e) => onChange('scheduleDate',e)
+  }
     options={generateDateOptions()}
   />
       <Input
@@ -71,9 +68,8 @@ const debouncedFilter = useRef (
         }
       />
       <Tabs
-         defaultActiveKey={searchParams.get("flightDirection")}
         items={list}
-        activeKey={searchParams.get('flightDirection')}
+        activeKey={searchParams.get('flightDirection') ?? "D"}
         onChange={(key) =>
           onChange("flightDirection", key)
         }

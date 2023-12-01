@@ -10,7 +10,7 @@ const useFlightData = () => {
   const { toastError } = useToast();
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0)
-const [prevPage, setPrevPage] = useState(0);
+
   useEffect(() => {
     getFlight(searchParams);
   }, [searchParams]);
@@ -36,8 +36,8 @@ const [prevPage, setPrevPage] = useState(0);
       setLoading(false) 
        })
       };
+
       const onLoadPrevMore = () => {
-        setPrevPage(p=> p + 1);
         const skeletonList = [...new Array(4)].map(() => ({
           loading: true,
         }));
@@ -47,11 +47,13 @@ const [prevPage, setPrevPage] = useState(0);
           [...skeletonList,...data]
           
         );
-        fetchFlight({...Object.fromEntries([...searchParams]),
-          toDateTime:moment().format('yyyy-MM-DDTHH:mm:ss'), 
+        const paramsObj = Object.fromEntries([...searchParams]);
+        delete paramsObj.scheduleDate;
+        fetchFlight({...paramsObj,
+          toDateTime:data[0]?.scheduleDateTime ? moment(data[0]?.scheduleDateTime).subtract(1,"m").utcOffset("+01:00").format('yyyy-MM-DDTHH:mm:ss') : moment().format('yyyy-MM-DDTHH:mm:ss'), 
           searchDateTimeField:'scheduleDateTime',
           sort:'-scheduleDateTime',
-          page:prevPage+1
+          // page:prevPage+1
         }).then((res) =>{
           console.log("dawda",res?.data?.flights.sort((a,b) => moment(a.scheduleDateTime) - moment(b.scheduleDateTime)))
           const newData2 = [...res?.data?.flights.sort((a,b) => moment(a.scheduleDateTime) - moment(b.scheduleDateTime)), ...data ]
@@ -68,8 +70,13 @@ const [prevPage, setPrevPage] = useState(0);
           };
     
   const getFlight = (filter) => {
-    
-    fetchFlight({...Object.fromEntries([...filter]),fromDateTime:moment().format('yyyy-MM-DDTHH:mm:ss'), sort:'+scheduleDateTime',searchDateTimeField:"scheduleDateTime" }).then((res) =>{
+    const paramsObj = Object.fromEntries([...filter]);
+    fetchFlight({...paramsObj,
+      fromDateTime:moment().format('yyyy-MM-DDTHH:mm:ss'), 
+      sort:'+scheduleDateTime',
+      searchDateTimeField:"scheduleDateTime",
+      flightDirection:paramsObj?.flightDirection ?? "D"
+     }).then((res) =>{
       setData(res?.data?.flights ?? [])
       setFlights(res?.data?.flights ?? [])
       setLoading(false) 
