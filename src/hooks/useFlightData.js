@@ -48,11 +48,13 @@ const [prevPage, setPrevPage] = useState(0);
           
         );
         fetchFlight({...Object.fromEntries([...searchParams]),
-          fromDateTime: moment().subtract(prevPage * 10,'m').format('yyyy-MM-DDTHH:mm:ss'), 
+          toDateTime:moment().format('yyyy-MM-DDTHH:mm:ss'), 
           searchDateTimeField:'scheduleDateTime',
-          toDateTime:moment(data[0].scheduleDateTime).format('yyyy-MM-DDTHH:mm:ss')
+          sort:'-scheduleDateTime',
+          page:prevPage+1
         }).then((res) =>{
-          const newData2 = [...res?.data?.flights, ...data ]
+          console.log("dawda",res?.data?.flights.sort((a,b) => moment(a.scheduleDateTime) - moment(b.scheduleDateTime)))
+          const newData2 = [...res?.data?.flights.sort((a,b) => moment(a.scheduleDateTime) - moment(b.scheduleDateTime)), ...data ]
           const newData = newData2.filter((obj, index) => {
             return index === newData2.findIndex(o => obj.id === o.id)}) ;
           setData(newData ?? [])
@@ -67,7 +69,7 @@ const [prevPage, setPrevPage] = useState(0);
     
   const getFlight = (filter) => {
     
-    fetchFlight({...Object.fromEntries([...filter]),scheduleTime:moment().format('HH:mm'),scheduleDate:moment().format('yyyy-MM-DD'), sort:'+scheduleTime' }).then((res) =>{
+    fetchFlight({...Object.fromEntries([...filter]),fromDateTime:moment().format('yyyy-MM-DDTHH:mm:ss'), sort:'+scheduleDateTime',searchDateTimeField:"scheduleDateTime" }).then((res) =>{
       setData(res?.data?.flights ?? [])
       setFlights(res?.data?.flights ?? [])
       setLoading(false) 

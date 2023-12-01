@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import { Avatard, List, Skeleton } from 'antd';
+import moment from 'moment';
 
 const FlightList = ({data, loadMore, loading}) => {
   return (
@@ -18,7 +19,7 @@ const FlightList = ({data, loadMore, loading}) => {
               description={item?.scheduleDateTime}
             />
             
-            <div>{item?.scheduleDateTime}</div><br></br>
+            <div>{moment(item?.scheduleDateTime).format('yyyy-MM-DDTHH:mm:ss')}</div><br></br>
             <div>{item?.route?.destinations[0]}</div>
           </Skeleton>
         </List.Item>
