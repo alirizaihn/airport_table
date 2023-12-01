@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
 import useFlightData from "hooks/useFlightData";
 import FlightList from "components/list/FlightList";
-import { Tabs, Input,Button } from "antd";
+import { Tabs, Input,Button, Select } from "antd";
 import debounce from 'lodash.debounce'
+import { generateDateOptions } from "utils/Common";
 const list = [
   {
     key: "D",
@@ -48,6 +49,18 @@ const debouncedFilter = useRef (
       >
         Button
       </Button>
+      <Select
+    showSearch
+    style={{ width: 200 }}
+    placeholder="Date"
+    optionFilterProp="children"
+    // filterOption={(input, option) => (option?.label ?? '').includes(input)}
+    // filterSort={(optionA, optionB) =>
+    //   (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+    // }
+  
+    options={generateDateOptions()}
+  />
       <Input
         value={query}
         placeholder="IATA CODE"
@@ -58,7 +71,7 @@ const debouncedFilter = useRef (
         }
       />
       <Tabs
-        defaultActiveKey="1"
+         defaultActiveKey={searchParams.get("flightDirection")}
         items={list}
         activeKey={searchParams.get('flightDirection')}
         onChange={(key) =>
