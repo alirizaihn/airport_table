@@ -12,3 +12,6 @@ const flightInstance = axios.create({
   })
 
   export const fetchFlight = (params) => flightInstance.get('flights', {params});
+  export const fetchAirLine = (id) => flightInstance.get(`airlines/${id}`)
+  export const fetchAirCraft = (params) => flightInstance.get(`aircrafttypes`,{params})
+  export const fetchDestination = (id) => flightInstance.get(`destinations/${id}`)

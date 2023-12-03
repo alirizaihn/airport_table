@@ -1,18 +1,20 @@
 import React, { useRef, useState } from "react";
 import useFlightData from "hooks/useFlightData";
 import FlightList from "components/list/FlightList";
-import { Tabs, Input,Button } from "antd";
+import { Tabs, Input,Button, Select, Row, Col, Flex } from "antd";
 import debounce from 'lodash.debounce'
+import { generateDateOptions } from "utils/Common";
+import ListItem from "components/list/ListItem";
 const list = [
   {
     key: "D",
     label: "Departures",
-    children: "Content of Tab Pane 1",
+   
   },
   {
     key: "A",
     label: "Arrivals",
-    children: "Content of Tab Pane 2",
+   
   },
 ];
 const Dashboard = () => {
@@ -39,16 +41,23 @@ const debouncedFilter = useRef (
   ).current
 
   return (
-    <div>
-       <Button
-        type="primary"
-        onClick={() => {
-          onLoadPrevMore()
-        }}
-      >
-        Button
-      </Button>
-      <Input
+    <Col> 
+     <Row justify="center">
+     <Col span={6}>
+      <Select
+    showSearch
+    style={{width:"300px"}}
+    placeholder="Date"
+    optionFilterProp="children"
+    value={searchParams.get("scheduleDate")}
+    onChange={(e) => onChange('scheduleDate',e)
+   
+  }
+    options={generateDateOptions()}
+  />
+      </Col>
+    <Col span={12 }>
+    <Input
         value={query}
         placeholder="IATA CODE"
         maxLength={3}
@@ -57,24 +66,39 @@ const debouncedFilter = useRef (
           setQuery(e.target.value);}
         }
       />
-      <Tabs
-        defaultActiveKey="1"
+    </Col>
+     </Row>
+      
+      
+     <Row justify="center">
+     <Tabs
         items={list}
-        activeKey={searchParams.get('flightDirection')}
+        activeKey={searchParams.get('flightDirection') ?? "D"}
         onChange={(key) =>
           onChange("flightDirection", key)
         }
       />
-      <FlightList data={flights} loading={loading}  />
+     </Row>
+      <Col justify="center">
+      <Button
+        type="primary"
+        onClick={() => {
+          onLoadPrevMore()
+        }}
+      >
+       Show earlier flights
+      </Button>
+      <FlightList data={flights} loading={loading} flightDirection={searchParams.get("flightDirection") || 'D'} />
       <Button
         type="primary"
         onClick={() => {
           onLoadMore();
         }}
       >
-        Button
+       Show later flights
       </Button>
-    </div>
+      </Col>
+    </Col>
   );
 };
 
