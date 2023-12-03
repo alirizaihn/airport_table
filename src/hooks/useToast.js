@@ -1,10 +1,10 @@
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export const useToast = () => {
   const toastError = (message) => {
     if (!message || message.length < 3) return;
     toast.error(`${message} 🥺`, {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -18,7 +18,7 @@ export const useToast = () => {
     if (!message || message.length < 3) return;
 
     toast.info(`${message} 👁`, {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -31,7 +31,7 @@ export const useToast = () => {
   const toastSuccess = (message) => {
     if (!message || message.length < 3) return;
     toast.success(`${message} 👌`, {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
