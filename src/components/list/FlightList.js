@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import { Avatard, Flex, List, Skeleton } from 'antd';
-import moment from 'moment';
+import { List, Skeleton } from 'antd';
 import ListItem from './ListItem';
 
 const FlightList = ({data, loadMore, loading, flightDirection}) => {
@@ -16,19 +15,6 @@ const FlightList = ({data, loadMore, loading, flightDirection}) => {
         <Skeleton loading={item?.loading} active>
         <ListItem data={item} flightDirection={flightDirection}/>
         </Skeleton>
-        // <List.Item
-        //   actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}
-        // >
-        //   <Skeleton loading={item?.loading} active>
-        //     <List.Item.Meta
-        //       title={<a href="https://ant.design">{item?.flightName}</a>}
-        //       description={item?.scheduleDateTime}
-        //     />
-            
-        //     <div>{moment(item?.scheduleDateTime).format('yyyy-MM-DDTHH:mm:ss')}</div><br></br>
-        //     <div>{item?.route?.destinations[0]}</div>
-        //   </Skeleton>
-        // </List.Item>
       )}
     />
   )
