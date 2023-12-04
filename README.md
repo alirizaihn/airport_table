@@ -1,6 +1,11 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Schiphol Airport Flight List Project
+This project is a web application that lists and filters the flights for Schiphol Airport using its API. The user can view the flights they want by selecting the departure or arrival direction, the flight day, and the IATA code of the destination or source airport. The flights are sorted by departure or arrival time and past flights are hidden. The flight information is taken from the official website of Schiphol Airport.
+
+## Technologies Used
+This project is developed using React library, Create React App tool, Ant Desing component library, Axios HTTP client, Moment.js date and time library.
 
 ## Available Scripts
 
